@@ -1,37 +1,14 @@
 from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
-from flask_marshmallow import Marshmallow
-from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 import os
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config.from_object("config.Config")
 
-#initializing db
-db = SQLAlchemy(app)
+from models import db ,Todo, todos_schema, todo_schema
 
-#initialize marshmallow
-ma = Marshmallow(app)
 
-class Todo(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    task = db.Column(db.String(200),unique=False,nullable=False)
-    is_done = db.Column(db.Boolean,unique=False,nullable=False,default=False)
-
-    def __init__(self,task,is_done):
-        self.task = task
-        self.is_done = is_done
-
-class TodoSchema(SQLAlchemyAutoSchema):
-    class Meta:
-        model = Todo
-        load_instance = True
-
-todo_schema = TodoSchema()
-todos_schema = TodoSchema(many=True)
 
 @app.route('/todo', methods=['GET'])
 def get_todos():
@@ -63,8 +40,16 @@ def post_todo():
     db.session.commit()
     return jsonify(todo_schema.dump(new_todo))
 
+@app.route('/todo/<id>', methods=['DELETE'])
+def delete_todo(id):
+   todo = Todo.query.get(id)
+   print(vars(todo))
+   db.session.delete(todo)
+   db.session.commit()
+   return jsonify(todo_schema.dump(todo))
 
-@app.route('/home', methods=['GET'])
+
+@app.route('/', methods=['GET'])
 def home():
     return {'respone':'hello world'}
 
