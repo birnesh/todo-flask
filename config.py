@@ -1,6 +1,6 @@
 import os
-ENVIRONMENT = 'dev'
-# ENVIRONMENT = 'prod'
+# ENVIRONMENT = 'dev'
+ENVIRONMENT = 'prod'
 basedir = os.path.abspath(os.path.dirname(__file__))
 class Config(object):
     if ENVIRONMENT == 'prod':
