@@ -88,7 +88,7 @@ def get_one_user(current_user, public_id):
     return jsonify(result)
 
 # Delete a user
-@app.route('/user<public_id>', methods=['DELETE'])
+@app.route('/user/<public_id>', methods=['DELETE'])
 @login_required
 def delete_user(current_user, public_id):
     user = User.query.filter_by(public_id=public_id).first()
