@@ -119,7 +119,7 @@ def create_user(current_user):
     new_user = User(public_id=str(uuid.uuid4()), name=data['name'], password=hashed_password, admin=False)
     db.session.add(new_user)
     db.session.commit()
-    return jsonify({'message':'New User Created'})
+    return jsonify(user_schema.dump(new_user))
 
 # Login user
 @app.route('/login')
