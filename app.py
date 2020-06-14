@@ -6,8 +6,11 @@ from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 import jwt
 import datetime
 from functools import wraps
+from flask_cors import CORS
+
 
 app = Flask(__name__)
+CORS(app)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 app.config.from_object("config.Config")
