@@ -19,6 +19,7 @@ app.config.from_object("config.Config")
 db = SQLAlchemy(app)
 
 class User(db.Model):
+    __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     public_id = db.Column(db.String(50), unique=True)
     name = db.Column(db.String(50))
@@ -26,6 +27,7 @@ class User(db.Model):
     admin = db.Column(db.Boolean)
 
 class Todo(db.Model):
+    __tablename__ = "todo"
     id = db.Column(db.Integer, primary_key=True)
     task = db.Column(db.String(200),unique=False,nullable=False)
     is_done = db.Column(db.Boolean,unique=False,nullable=False,default=False)
@@ -188,5 +190,5 @@ def delete_todo(current_user, id):
 def home():
     return {'respone':'hello world'}
 
-if __name__ == '__main__':
-    app.run()
+# if __name__ == '__main__':
+#     app.run()
